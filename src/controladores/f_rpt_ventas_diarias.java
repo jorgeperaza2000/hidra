@@ -8,7 +8,6 @@ package controladores;
 import configuracion.ws_config;
 import java.io.IOException;
 import java.util.Iterator;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -29,7 +28,7 @@ import org.json.simple.parser.ParseException;
  */
 public class f_rpt_ventas_diarias {
     
-    public void obtenerVentasDiarias(JTable jTable, JTextField jTextFieldFecha) throws IOException, ParseException {
+    public void obtenerVentasDiarias(JTable jTable, JTextField jTextFieldFecha, JLabel jLabelMensajeRespuesta) throws IOException, ParseException {
         ws_config ws = new ws_config();
         String pathToServer = ws.getPath();
         
@@ -39,25 +38,35 @@ public class f_rpt_ventas_diarias {
             modelo.removeRow(i);
         }
         String agencia_usuario = f_datos_usuario.agenciaUsuario;
-        
+        jLabelMensajeRespuesta.setText("");
         CloseableHttpClient client = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet(pathToServer + "rpt_ventas_diarias/" + jTextFieldFecha.getText() + "/" + agencia_usuario);
         get.addHeader("accept", "application/json");
-        HttpResponse response = client.execute(get);
-        String json = EntityUtils.toString(response.getEntity(), "UTF-8");
-
-        JSONParser parser = new JSONParser();
-        Object resultObject = parser.parse(json);
+        HttpResponse response = null;
+        try {
+            response = client.execute(get);
         
-        DefaultTableModel temporalModel = (DefaultTableModel) jTable.getModel();
-        if (resultObject instanceof JSONArray) {
-            JSONArray array=(JSONArray)resultObject;
-            for (Iterator it = array.iterator(); it.hasNext();) {
-                Object object = it.next();
-                JSONObject obj =(JSONObject)object;
-                Object ventasGenerales[] = { obj.get("venta"), obj.get("premios"), obj.get("total")};
-                temporalModel.addRow(ventasGenerales);
+            String json = EntityUtils.toString(response.getEntity(), "UTF-8");
+
+            JSONParser parser = new JSONParser();
+            Object resultObject = parser.parse(json);
+
+            DefaultTableModel temporalModel = (DefaultTableModel) jTable.getModel();
+            if (resultObject instanceof JSONArray) {
+                JSONArray array = (JSONArray)resultObject;
+                for (Iterator it = array.iterator(); it.hasNext();) {
+                    Object object = it.next();
+                    JSONObject obj =(JSONObject)object;
+                    if ( obj.get("venta") == null ) {
+                        jLabelMensajeRespuesta.setText("No hay datos para mostrar..."); 
+                    } else {
+                        Object ventasGenerales[] = { obj.get("venta"), obj.get("premios"), obj.get("total")};
+                        temporalModel.addRow(ventasGenerales);
+                    }
+                }
             }
+        } catch (IOException ex) {
+            jLabelMensajeRespuesta.setText("Ocurrio un error consultando los datos... comprueba su conexion a internet.");
         }
     }
 }

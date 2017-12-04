@@ -29,7 +29,7 @@ import org.json.simple.parser.ParseException;
  */
 public class f_login {
     
-    private f_datos_usuario datosUsuario = new f_datos_usuario();
+    //private final f_datos_usuario datosUsuario = new f_datos_usuario();
     
     public String getLogin(String usuario, String clave, JLabel jLabelMensaje) throws IOException, ParseException, InterruptedException {
         
@@ -67,10 +67,10 @@ public class f_login {
                 Object object = it.next();
                 JSONObject obj =(JSONObject)object;
                 if( obj.get("codigoRespuesta").equals("ok") ) {
-                    datosUsuario.idUsuario = Integer.parseInt((String) obj.get("id"));
-                    datosUsuario.nombreUsuario = (String) obj.get("nombre");
-                    datosUsuario.agenciaUsuario = (String) obj.get("agencia");
-                    datosUsuario.tipoUsuario = (String) obj.get("tipo");
+                    f_datos_usuario.idUsuario = Integer.parseInt((String) obj.get("id"));
+                    f_datos_usuario.nombreUsuario = (String) obj.get("nombre");
+                    f_datos_usuario.agenciaUsuario = (String) obj.get("agencia");
+                    f_datos_usuario.tipoUsuario = (String) obj.get("tipo");
                     respuesta = "ok";
                 } else if ( obj.get("codigoRespuesta").equals("error") ) {
                     respuesta = "error";

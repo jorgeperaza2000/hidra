@@ -11,11 +11,7 @@ package configuracion;
  */
 public class ws_config {
     
-    private static String pathToServer;
-    
-    public ws_config() {
-        //this.setPath("http://animalitos.local/apis/");
-    }
+    public static String pathToServer;
     
     public void setPath(String pathToServer) {
         ws_config.pathToServer = pathToServer;

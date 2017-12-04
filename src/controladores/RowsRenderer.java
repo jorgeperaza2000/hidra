@@ -30,7 +30,7 @@ public class RowsRenderer extends DefaultTableCellRenderer {
         if (table.getValueAt(row, columna).equals("Sorteo Cerrado")) {
             this.setForeground(Color.red);
         } else if ( table.getValueAt(row, columna).equals("Agotado")) {
-            this.setForeground(Color.green);
+            this.setForeground(Color.black);
         } else {
            this.setForeground(Color.black); 
         }

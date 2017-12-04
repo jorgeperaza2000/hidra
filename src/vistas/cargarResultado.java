@@ -131,7 +131,7 @@ public class cargarResultado extends javax.swing.JDialog {
     private void jButtonCargarResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarResultadosActionPerformed
         String reNumeroAnimalResultado = JOptionPane.showInputDialog(null, "Repita el número ganador");
         if ( this.jTextFieldResNumeroAnimal.getText().equals(reNumeroAnimalResultado) ) {
-            System.out.println("FINO");
+            
         } else {
             JOptionPane.showMessageDialog(null, "Los resultados no coinciden, intente nuevamente");
         }

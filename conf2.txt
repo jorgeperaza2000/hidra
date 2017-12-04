@@ -1,3 +1,4 @@
 http://localhost/animals/apis/
 
 http://codefull.96.lt/animals/apis/
+http://codefull.96.lt/animals/apis/

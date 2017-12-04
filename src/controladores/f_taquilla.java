@@ -8,8 +8,13 @@ package controladores;
 import configuracion.ws_config;
 import java.awt.Component;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -263,8 +268,10 @@ public class f_taquilla {
         File archivo = new File("lastTicket.txt");
         
         FileWriter bw = new FileWriter(archivo,false);
+        
+        String contentTicketDuplicate = this.contentTicket.replace("T. Original", "Copia");
 
-        bw.write(contentTicket);
+        bw.write(contentTicketDuplicate);
 
         bw.close();
          
@@ -297,6 +304,33 @@ public class f_taquilla {
                                 "VERIFIQUE TICKET. CADUCA 3 DIAS\n"+
                                 "\n\n\n ";
         
+    }
+    
+    public void printTicketDuplicate() throws FileNotFoundException, IOException{
+               
+        String content = readFile("lastTicket.txt", Charset.defaultCharset());
+        
+        //FileReader fr = new FileReader(archivo);
+
+        //String contentTicketDuplicate = fr.toString();
+        
+        byte[] bytes = content.getBytes();
+        
+        PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+        DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+        Doc doc = new SimpleDoc(bytes,flavor,null);
+        
+        if (service != null) {
+            DocPrintJob job = service.createPrintJob();
+            try {
+                job.print(doc, null);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            System.err.println("No existen impresoras instaladas");
+        }
     }
     
     public void actualizaMontosApuesta(JTable jTableApuesta, int cuantos, String numeroAnimal, String idSorteo, Integer monto){
@@ -576,5 +610,10 @@ public class f_taquilla {
             temp.setValueAt(false, i, 0);
         }
         jTextMontoAnimal.setText(null);
+    }
+
+    static String readFile(String lastTickettxt, Charset defaultCharset) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(lastTickettxt));
+        return new String(encoded, defaultCharset);
     }
 }

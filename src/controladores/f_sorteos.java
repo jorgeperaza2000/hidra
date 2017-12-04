@@ -24,7 +24,8 @@ import org.json.simple.parser.ParseException;
 
 public class f_sorteos {
     
-    private final int horaCierre = 55;
+    private final int horaMinCierre = 54;
+    private final int horaMaxCierre = 59;
     public void getSorteos(final JTable jTableSorteos) {
         Timer timer;
         timer = new Timer();
@@ -36,49 +37,53 @@ public class f_sorteos {
                 try {
                     Calendar calendario = Calendar.getInstance();
                     int minutos = calendario.get(Calendar.MINUTE);
-                    if ( minutos == horaCierre ) {
+                    if ( minutos >= horaMinCierre && minutos <= horaMaxCierre ) {
                         refrescaSorteos(jTableSorteos);
-                        System.out.println("Se ejecuto dentro" + minutos);
-                    } else {
-                        System.out.println("Se ejecuto" + minutos);
-                    }
-                    
+                    }                    
                 } catch (ParseException | IOException ex) {
                     Logger.getLogger(f_sorteos.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         };
         // Empezamos dentro de 1ms y luego lanzamos la tarea cada 10000ms o 10Seg
-        timer.schedule(task, 1, 60000);
+        timer.schedule(task, 1, 30000);
     }
     
     public void refrescaSorteos(JTable jTableSorteos) throws IOException, ParseException {
         ws_config ws = new ws_config();
         String pathToServer = ws.getPath();
-        DefaultTableModel modelo = (DefaultTableModel) jTableSorteos.getModel();
-        int rowCount = modelo.getRowCount();
-        for (int i = rowCount-1; i>=0;i--){
-            modelo.removeRow(i);
-        }
-        
         CloseableHttpClient client = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet(pathToServer + "sorteos");
         get.addHeader("accept", "application/json");
-        HttpResponse response = client.execute(get);
-        String json = EntityUtils.toString(response.getEntity(), "UTF-8");
+        HttpResponse response = null;
+        try {
+            response = client.execute(get);
+            if (response.getStatusLine().getStatusCode() == 404 || response == null ) {
+                
+            } else {
+                String json = EntityUtils.toString(response.getEntity(), "UTF-8");
 
-        JSONParser parser = new JSONParser();
-        Object resultObject = parser.parse(json);
-        
-        DefaultTableModel temporalModel = (DefaultTableModel) jTableSorteos.getModel();
-        if (resultObject instanceof JSONArray) {
-            JSONArray array=(JSONArray)resultObject;
-            for (Iterator it = array.iterator(); it.hasNext();) {
-                Object object = it.next();
-                JSONObject obj =(JSONObject)object;
-                Object sorteos[]= { false, obj.get("id"), obj.get("sorteo")};
-                temporalModel.addRow(sorteos);
+                JSONParser parser = new JSONParser();
+                Object resultObject = parser.parse(json);
+
+                DefaultTableModel originalModel = (DefaultTableModel) jTableSorteos.getModel();
+                if (resultObject instanceof JSONArray) {
+                    JSONArray array=(JSONArray)resultObject;
+                    //SOLO ACTUALIZAR 
+                    if ( originalModel.getRowCount() != array.size() ) {
+                        for (int i = originalModel.getRowCount()-1; i>=0;i--){
+                            originalModel.removeRow(i);
+                        }
+                        for (Iterator it = array.iterator(); it.hasNext();) {
+                            Object object = it.next();
+                            JSONObject obj =(JSONObject)object;
+                            Object sorteos[]= { false, obj.get("id"), obj.get("sorteo")};
+                            originalModel.addRow(sorteos);
+                        }
+                    }
+                }
             }
+        } catch (IOException ex) {
         }
     }
     

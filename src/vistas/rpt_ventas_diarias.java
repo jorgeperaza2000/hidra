@@ -80,6 +80,7 @@ public class rpt_ventas_diarias extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         jButtonCancelar = new javax.swing.JButton();
         jButtonBuscar = new javax.swing.JButton();
+        jLabelMensajeRespuesta = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("LottoActivo :: Ventas Diarias");
@@ -88,7 +89,7 @@ public class rpt_ventas_diarias extends javax.swing.JDialog {
         jPanel1.setBackground(java.awt.Color.white);
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTableVentasDiarias.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
+        jTableVentasDiarias.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
         jTableVentasDiarias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -114,7 +115,7 @@ public class rpt_ventas_diarias extends javax.swing.JDialog {
             jTableVentasDiarias.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 798, 69));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 798, 69));
 
         jPanel2.setBackground(new java.awt.Color(19, 127, 141));
 
@@ -211,6 +212,9 @@ public class rpt_ventas_diarias extends javax.swing.JDialog {
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 230, 90));
 
+        jLabelMensajeRespuesta.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(jLabelMensajeRespuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 800, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -219,7 +223,7 @@ public class rpt_ventas_diarias extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
         );
 
         pack();
@@ -239,7 +243,7 @@ public class rpt_ventas_diarias extends javax.swing.JDialog {
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         try {
-            ventas_diarias.obtenerVentasDiarias(this.jTableVentasDiarias, this.jTextFieldFecha);
+            ventas_diarias.obtenerVentasDiarias(this.jTableVentasDiarias, this.jTextFieldFecha, this.jLabelMensajeRespuesta);
         } catch (IOException | ParseException ex) {
             Logger.getLogger(rpt_ventas_diarias.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -294,6 +298,7 @@ public class rpt_ventas_diarias extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelMensajeRespuesta;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
