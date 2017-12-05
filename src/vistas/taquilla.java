@@ -10,13 +10,11 @@ import controladores.f_datos_usuario;
 import controladores.f_resultados;
 import controladores.f_taquilla;
 import controladores.f_sorteos;
-import conexiones.utilitarios;
 import configuracion.ws_config;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -41,17 +39,16 @@ public class taquilla extends javax.swing.JFrame {
     public taquilla() throws IOException, ParseException {
         botones.seleccionado = false;
         initComponents();
-        this.jTextNumeroAnimal.requestFocus(true);
-        botones.agregarIconoBotones(jPanelBonotesAnimales);
         this.setLocationRelativeTo(null);
+        botones.agregarIconoBotones(jPanelBonotesAnimales);
+        this.jTextNumeroAnimal.requestFocus(true);
         taquilla.formatjTableApuesta(jTableApuesta);
         taquilla.formatjTableSorteos(jTableSorteos);
         jTextNuevoMonto.setEnabled(false);
         sorteos.refrescaSorteos(jTableSorteos);
         sorteos.getSorteos(jTableSorteos);
         taquilla.getNextNumeroTicket(jLabelNumeroTicket, taquilla.cargarFechaHoy());
-        this.cargarResultadosPrincipal(taquilla.cargarFechaHoy(), this.jTableResultados);
-        this.obtenerConectividad(); 
+        obtenerConectividad(); 
         
         if ( f_datos_usuario.tipoUsuario.equals("Admin") ) {
             this.jMenuConfiguracion.setVisible(true);
@@ -177,11 +174,17 @@ public class taquilla extends javax.swing.JFrame {
                     huc.setConnectTimeout(3000);
                     huc.connect();
                     jLabelConectividad.setText("");
-                    new utilitarios().setEnabled2(jPanelPrincipal, true);
+                    jButtonJugar.setEnabled(true);
+                    jButtonClonar.setEnabled(true);
+                    jButtonPagar.setEnabled(true);
+                    jButtonAnular.setEnabled(true);
                     jMenuBar1.setVisible(true);
-                } catch (Exception e) { 
+                } catch (IOException e) { 
                     jLabelConectividad.setText("No hay conexion a internet!");
-                    new utilitarios().setEnabled2(jPanelPrincipal, false);
+                    jButtonJugar.setEnabled(false);
+                    jButtonClonar.setEnabled(false);
+                    jButtonPagar.setEnabled(false);
+                    jButtonAnular.setEnabled(false);
                     jMenuBar1.setVisible(false);
                 }
             }
@@ -190,33 +193,15 @@ public class taquilla extends javax.swing.JFrame {
     }
     
     public void cargarResultadosPrincipal(final String fecha, final JTable jTableApuesta ){       
-        Timer timer;
-        timer = new Timer();
-        
-        TimerTask task;
-        task = new TimerTask() {
-            @Override
-            public void run()
-            {
-                int horaMinResultado = 03;
-                int horaMaxResultado = 15;
-                try {
-                    Calendar calendario = Calendar.getInstance();
-                    int minutos = calendario.get(Calendar.MINUTE);
-                    if ( minutos >= horaMinResultado && minutos <= horaMaxResultado ) {
-                        resultados.obtenerResultadosSimple(fecha, jTableApuesta);
-                    }
-                } catch (IOException | ParseException ex) {
-                    Logger.getLogger(taquilla.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        };
-        // Empezamos dentro de 1ms y luego lanzamos la tarea cada 10000ms o 10Seg
-        timer.schedule(task, 1, 300000);
+        try {
+            resultados.obtenerResultadosSimple(fecha, jTableApuesta);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(taquilla.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.jTextNumeroAnimal.requestFocus();
     }
     
     public void marcarSorteo(String tecla) {
-        
         DefaultTableModel modelo = (DefaultTableModel) jTableSorteos.getModel();
         int rows = modelo.getRowCount();
         String sorteoId = null;
@@ -304,9 +289,9 @@ public class taquilla extends javax.swing.JFrame {
         jTextMontoAnimal = new javax.swing.JTextField();
         jButtonAgregarAnimal = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButtonPagar = new javax.swing.JButton();
+        jButtonClonar = new javax.swing.JButton();
+        jButtonAnular = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButtonElimarApuesta = new javax.swing.JButton();
         jTextNuevoMonto = new javax.swing.JTextField();
@@ -339,6 +324,7 @@ public class taquilla extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabelConectividad = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenuItemSalir = new javax.swing.JMenuItem();
@@ -351,14 +337,13 @@ public class taquilla extends javax.swing.JFrame {
         jMenuItemPagarTicket = new javax.swing.JMenuItem();
         jMenuItemAnularTicket = new javax.swing.JMenuItem();
         jMenuItemClonarTicket = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuConfiguracion = new javax.swing.JMenu();
         jMenuItemSistema = new javax.swing.JMenuItem();
 
         jMenu4.setText("jMenu4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("LottoActivo :: Ventas");
+        setTitle("Hidra :: LottoActivo :: Ventas");
         setBackground(new java.awt.Color(0, 255, 153));
         setIconImage(getIconImage());
         setResizable(false);
@@ -1050,45 +1035,45 @@ public class taquilla extends javax.swing.JFrame {
         jLabel2.setText("Monto:");
         jPanelPrincipal.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 50, -1, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/monedas.jpg"))); // NOI18N
-        jButton1.setToolTipText("Presione (P) para pagar ticket");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton1.setMaximumSize(new java.awt.Dimension(80, 70));
-        jButton1.setMinimumSize(new java.awt.Dimension(80, 70));
-        jButton1.setPreferredSize(new java.awt.Dimension(80, 68));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/monedas.jpg"))); // NOI18N
+        jButtonPagar.setToolTipText("Presione (P) para pagar ticket");
+        jButtonPagar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButtonPagar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButtonPagar.setMaximumSize(new java.awt.Dimension(80, 70));
+        jButtonPagar.setMinimumSize(new java.awt.Dimension(80, 70));
+        jButtonPagar.setPreferredSize(new java.awt.Dimension(80, 68));
+        jButtonPagar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonPagarActionPerformed(evt);
             }
         });
-        jPanelPrincipal.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, 84, 73));
+        jPanelPrincipal.add(jButtonPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, 84, 73));
 
-        jButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/duplicar.jpg"))); // NOI18N
-        jButton2.setToolTipText("Presione (C) para clonar ticket");
-        jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton2.setMaximumSize(new java.awt.Dimension(80, 70));
-        jButton2.setMinimumSize(new java.awt.Dimension(80, 70));
-        jButton2.setPreferredSize(new java.awt.Dimension(80, 70));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonClonar.setBackground(new java.awt.Color(255, 255, 255));
+        jButtonClonar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/duplicar.jpg"))); // NOI18N
+        jButtonClonar.setToolTipText("Presione (C) para clonar ticket");
+        jButtonClonar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButtonClonar.setMaximumSize(new java.awt.Dimension(80, 70));
+        jButtonClonar.setMinimumSize(new java.awt.Dimension(80, 70));
+        jButtonClonar.setPreferredSize(new java.awt.Dimension(80, 70));
+        jButtonClonar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonClonarActionPerformed(evt);
             }
         });
-        jPanelPrincipal.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 310, 79, 73));
+        jPanelPrincipal.add(jButtonClonar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 310, 79, 73));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/anular.jpg"))); // NOI18N
-        jButton3.setToolTipText("Presione (A) para anular ticket");
-        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton3.setMaximumSize(new java.awt.Dimension(100, 70));
-        jButton3.setPreferredSize(new java.awt.Dimension(100, 70));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAnular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/anular.jpg"))); // NOI18N
+        jButtonAnular.setToolTipText("Presione (A) para anular ticket");
+        jButtonAnular.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButtonAnular.setMaximumSize(new java.awt.Dimension(100, 70));
+        jButtonAnular.setPreferredSize(new java.awt.Dimension(100, 70));
+        jButtonAnular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonAnularActionPerformed(evt);
             }
         });
-        jPanelPrincipal.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 310, 80, 73));
+        jPanelPrincipal.add(jButtonAnular, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 310, 80, 73));
 
         jButton4.setText("Imprimir Copia");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -1134,7 +1119,7 @@ public class taquilla extends javax.swing.JFrame {
                 jButtonCancelarJugadaActionPerformed(evt);
             }
         });
-        jPanelPrincipal.add(jButtonCancelarJugada, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 50, -1, 40));
+        jPanelPrincipal.add(jButtonCancelarJugada, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 50, -1, 40));
 
         jButtonEditarMonto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/edit.jpg"))); // NOI18N
         jButtonEditarMonto.setToolTipText("Editar Monto");
@@ -1172,7 +1157,7 @@ public class taquilla extends javax.swing.JFrame {
             jTableApuesta.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jPanelPrincipal.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 97, 519, 510));
+        jPanelPrincipal.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 97, 430, 510));
 
         jButtonJugar.setBackground(new java.awt.Color(19, 127, 141));
         jButtonJugar.setForeground(java.awt.Color.white);
@@ -1183,7 +1168,7 @@ public class taquilla extends javax.swing.JFrame {
                 jButtonJugarActionPerformed(evt);
             }
         });
-        jPanelPrincipal.add(jButtonJugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(928, 50, 90, 40));
+        jPanelPrincipal.add(jButtonJugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 50, 90, 40));
 
         jTableResultados.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTableResultados.setModel(new javax.swing.table.DefaultTableModel(
@@ -1203,13 +1188,18 @@ public class taquilla extends javax.swing.JFrame {
             }
         });
         jTableResultados.getTableHeader().setReorderingAllowed(false);
+        jTableResultados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableResultadosMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTableResultados);
         if (jTableResultados.getColumnModel().getColumnCount() > 0) {
             jTableResultados.getColumnModel().getColumn(0).setResizable(false);
             jTableResultados.getColumnModel().getColumn(1).setResizable(false);
         }
 
-        jPanelPrincipal.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, 260, 160));
+        jPanelPrincipal.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 460, 260, 150));
 
         jPanel1.setBackground(new java.awt.Color(19, 127, 141));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1236,15 +1226,15 @@ public class taquilla extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Numero de jugadas:");
+        jLabel3.setText("Jugadas:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 10, -1, 20));
 
         jLabelNumeroJugadas.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabelNumeroJugadas.setForeground(new java.awt.Color(255, 255, 255));
         jLabelNumeroJugadas.setText("0");
-        jPanel1.add(jLabelNumeroJugadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 10, 29, 20));
+        jPanel1.add(jLabelNumeroJugadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 29, 20));
 
-        jPanelPrincipal.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 520, 40));
+        jPanelPrincipal.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 430, 40));
 
         jSeparator2.setBackground(new java.awt.Color(19, 127, 141));
         jSeparator2.setForeground(new java.awt.Color(19, 127, 141));
@@ -1311,7 +1301,7 @@ public class taquilla extends javax.swing.JFrame {
         jPanelPrincipal.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(241, 97, 260, 205));
 
         jLabel6.setText("Ultimos Resultados del día");
-        jPanelPrincipal.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 430, -1, -1));
+        jPanelPrincipal.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 440, -1, -1));
 
         jLabelConectividad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabelConectividad.setForeground(new java.awt.Color(255, 51, 51));
@@ -1320,9 +1310,17 @@ public class taquilla extends javax.swing.JFrame {
 
         jLabel9.setForeground(new java.awt.Color(102, 102, 102));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Versión: 1.2-171204");
+        jLabel9.setText("Versión: 1.2-171206");
         jLabel9.setToolTipText("");
-        jPanelPrincipal.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 610, 110, 20));
+        jPanelPrincipal.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 610, 130, 20));
+
+        jButton1.setText("Refrescar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanelPrincipal.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, -1, -1));
 
         jMenu5.setText("Archivo");
 
@@ -1405,14 +1403,6 @@ public class taquilla extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItemClonarTicket);
 
-        jMenuItem1.setText("Resultados");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
-
         jMenuBar1.add(jMenu1);
 
         jMenuConfiguracion.setText("Configuracion");
@@ -1428,7 +1418,9 @@ public class taquilla extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1043, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 959, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1506,12 +1498,6 @@ public class taquilla extends javax.swing.JFrame {
                 taquilla.devuelveFoco(jTextNumeroAnimal);
                 
             } else {
-                /*jTextNuevoMonto.setText(null);
-                jTextNuevoMonto.setEnabled(false);
-                jTableApuesta.clearSelection();
-                taquilla.setNumeroJugadas(jTableApuesta, jLabelNumeroJugadas);
-                taquilla.setMontoJugadas(jTableApuesta, jLabelMontoJugadas);
-                taquilla.devuelveFoco(jTextNumeroAnimal);*/
                 JOptionPane.showMessageDialog(null, "El monto minimo por apuesta es de 100 Bs.", "Monto por jugada", 1);
                 jTextNuevoMonto.selectAll();
             }
@@ -1535,17 +1521,17 @@ public class taquilla extends javax.swing.JFrame {
         taquilla.devuelveFoco(jTextNumeroAnimal);
     }//GEN-LAST:event_jButtonElimarApuestaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButtonAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnularActionPerformed
         this.jMenuItemAnularTicket.doClick();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButtonAnularActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonClonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClonarActionPerformed
         this.jMenuItemClonarTicket.doClick();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonClonarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPagarActionPerformed
         this.jMenuItemPagarTicket.doClick();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonPagarActionPerformed
 
     private void jButtonAgregarAnimalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAgregarAnimalMouseClicked
         Boolean haySorteoSeleccionado = false;
@@ -1913,9 +1899,13 @@ public class taquilla extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        new cargarResultado(this, true).setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void jTableResultadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableResultadosMouseClicked
+        
+    }//GEN-LAST:event_jTableResultadosMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.cargarResultadosPrincipal(taquilla.cargarFechaHoy(), this.jTableResultados);
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1959,14 +1949,15 @@ public class taquilla extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButtonAgregarAnimal;
+    private javax.swing.JButton jButtonAnular;
     private javax.swing.JButton jButtonCancelarJugada;
+    private javax.swing.JButton jButtonClonar;
     private javax.swing.JButton jButtonEditarMonto;
     private javax.swing.JButton jButtonElimarApuesta;
     private javax.swing.JButton jButtonJugar;
+    private javax.swing.JButton jButtonPagar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1986,7 +1977,6 @@ public class taquilla extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuConfiguracion;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemAnularTicket;
     private javax.swing.JMenuItem jMenuItemClonarTicket;
     private javax.swing.JMenuItem jMenuItemPagarTicket;

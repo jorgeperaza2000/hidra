@@ -155,15 +155,26 @@ public class f_rpt_tickets {
         JSONParser parser = new JSONParser();
         Object resultObject = parser.parse(json);
         
+        int T_total_ticket = 0;
+        int T_total_monto = 0;
+        int T_monto_premiado = 0;
+        
         DefaultTableModel temporalModel = (DefaultTableModel) jTable.getModel();
         if (resultObject instanceof JSONArray) {
             JSONArray array=(JSONArray)resultObject;
+            int i = 0;
             for (Iterator it = array.iterator(); it.hasNext();) {
                 Object object = it.next();
                 JSONObject obj =(JSONObject)object;
                 Object tickets[] = { obj.get("id"), obj.get("fecha") + " " + obj.get("hora"), obj.get("numero_ticket"), obj.get("total_monto"), obj.get("monto_premiado"), obj.get("monto_pagado"), obj.get("pagado")};
                 temporalModel.addRow(tickets);
+                //TOTALES
+                T_total_ticket = ++i;
+                T_total_monto += Integer.parseInt(obj.get("total_monto").toString());
+                T_monto_premiado += Integer.parseInt(obj.get("monto_premiado").toString());
             }
+            Object tickets[] = { "", "    Totales:", T_total_ticket, T_total_monto, T_monto_premiado, "", ""};
+            temporalModel.addRow(tickets);
         }
     }
     

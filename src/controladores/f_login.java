@@ -72,7 +72,7 @@ public class f_login {
                     f_datos_usuario.agenciaUsuario = (String) obj.get("agencia");
                     f_datos_usuario.tipoUsuario = (String) obj.get("tipo");
                     respuesta = "ok";
-                } else if ( obj.get("codigoRespuesta").equals("error") ) {
+                } else {
                     respuesta = "error";
                 }
             }    
