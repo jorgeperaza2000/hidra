@@ -1310,7 +1310,7 @@ public class taquilla extends javax.swing.JFrame {
 
         jLabel9.setForeground(new java.awt.Color(102, 102, 102));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Versión: 1.2-171206");
+        jLabel9.setText("Versión: 1.2-171209");
         jLabel9.setToolTipText("");
         jPanelPrincipal.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 610, 130, 20));
 
@@ -1859,10 +1859,15 @@ public class taquilla extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonEditarMontoActionPerformed
 
     private void jMenuItemClonarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemClonarTicketActionPerformed
-        new clonarTicket(this, true).setVisible(true);
-        this.jTableApuesta.setModel(modeloTabla);
-        new f_taquilla().formatjTableApuesta(this.jTableApuesta);
-        taquilla.setearTotalJugada(jTableApuesta, jLabelNumeroJugadas, jLabelMontoJugadas);
+        try{
+            new clonarTicket(this, true).setVisible(true);
+            this.jTableApuesta.setModel(modeloTabla);
+            new f_taquilla().formatjTableApuesta(this.jTableApuesta);
+            taquilla.setearTotalJugada(jTableApuesta, jLabelNumeroJugadas, jLabelMontoJugadas);
+        } catch(Exception e) {
+            
+        }
+        
     }//GEN-LAST:event_jMenuItemClonarTicketActionPerformed
 
     private void jMenuItemVentasDiariasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVentasDiariasActionPerformed

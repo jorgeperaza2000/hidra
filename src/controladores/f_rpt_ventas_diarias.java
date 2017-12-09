@@ -7,6 +7,7 @@ package controladores;
 
 import configuracion.ws_config;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -50,17 +51,27 @@ public class f_rpt_ventas_diarias {
 
             JSONParser parser = new JSONParser();
             Object resultObject = parser.parse(json);
-
+            float venta = 0;
+            float premios = 0;
+            float total = 0;
             DefaultTableModel temporalModel = (DefaultTableModel) jTable.getModel();
             if (resultObject instanceof JSONArray) {
                 JSONArray array = (JSONArray)resultObject;
+                DecimalFormat df = new DecimalFormat();
+                df.setMinimumFractionDigits(2);
+                df.setMaximumFractionDigits(2);
+                
                 for (Iterator it = array.iterator(); it.hasNext();) {
                     Object object = it.next();
                     JSONObject obj =(JSONObject)object;
+                    venta = Float.parseFloat(String.valueOf((obj.get("venta")==null)?0:obj.get("venta")));
+                    premios = Float.parseFloat(String.valueOf((obj.get("premios")==null)?0:obj.get("premios")));
+                    total = Float.parseFloat(String.valueOf((obj.get("total")==null)?0:obj.get("total")));
+                    
                     if ( obj.get("venta") == null ) {
                         jLabelMensajeRespuesta.setText("No hay datos para mostrar..."); 
                     } else {
-                        Object ventasGenerales[] = { obj.get("venta"), obj.get("premios"), obj.get("total")};
+                        Object ventasGenerales[] = { String.valueOf(df.format(venta)), String.valueOf(df.format(premios)), String.valueOf(df.format(total))};
                         temporalModel.addRow(ventasGenerales);
                     }
                 }

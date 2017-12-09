@@ -7,6 +7,7 @@ package controladores;
 
 import configuracion.ws_config;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -156,24 +157,40 @@ public class f_rpt_tickets {
         Object resultObject = parser.parse(json);
         
         int T_total_ticket = 0;
-        int T_total_monto = 0;
-        int T_monto_premiado = 0;
+        float T_total_monto = 0;
+        float T_monto_premiado = 0;
+        float T_monto_pagado = 0;
+        float total_monto = 0;
+        float monto_premiado = 0;
+        float monto_pagado = 0;
         
         DefaultTableModel temporalModel = (DefaultTableModel) jTable.getModel();
         if (resultObject instanceof JSONArray) {
             JSONArray array=(JSONArray)resultObject;
             int i = 0;
+            DecimalFormat df = new DecimalFormat();
+            df.setMinimumFractionDigits(2);
+            df.setMaximumFractionDigits(2);
             for (Iterator it = array.iterator(); it.hasNext();) {
                 Object object = it.next();
                 JSONObject obj =(JSONObject)object;
-                Object tickets[] = { obj.get("id"), obj.get("fecha") + " " + obj.get("hora"), obj.get("numero_ticket"), obj.get("total_monto"), obj.get("monto_premiado"), obj.get("monto_pagado"), obj.get("pagado")};
+                
+                
+                System.out.println(obj.get("monto_pagado"));
+                
+                total_monto = Float.parseFloat(String.valueOf(obj.get("total_monto")));
+                monto_premiado = Float.parseFloat(String.valueOf(obj.get("monto_premiado")));
+                monto_pagado = Float.parseFloat(String.valueOf((obj.get("monto_pagado")==null?0:obj.get("monto_pagado"))));
+                
+                Object tickets[] = { obj.get("id"), obj.get("fecha") + " " + obj.get("hora"), obj.get("numero_ticket"), String.valueOf(df.format(total_monto)), String.valueOf(df.format(monto_premiado)), String.valueOf(df.format(monto_pagado)), obj.get("pagado")};
                 temporalModel.addRow(tickets);
                 //TOTALES
                 T_total_ticket = ++i;
-                T_total_monto += Integer.parseInt(obj.get("total_monto").toString());
-                T_monto_premiado += Integer.parseInt(obj.get("monto_premiado").toString());
+                T_total_monto += total_monto;
+                T_monto_premiado += monto_premiado;
+                T_monto_pagado += monto_pagado;
             }
-            Object tickets[] = { "", "    Totales:", T_total_ticket, T_total_monto, T_monto_premiado, "", ""};
+            Object tickets[] = { "", "    Totales:", T_total_ticket, String.valueOf(df.format(T_total_monto)), String.valueOf(df.format(T_monto_premiado)), String.valueOf(df.format(T_monto_pagado)), ""};
             temporalModel.addRow(tickets);
         }
     }
@@ -196,13 +213,22 @@ public class f_rpt_tickets {
         JSONParser parser = new JSONParser();
         Object resultObject = parser.parse(json);
         
+        float monto_apuesta = 0;
+        float monto_premiado = 0;
         DefaultTableModel temporalModel = (DefaultTableModel) jTable.getModel();
         if (resultObject instanceof JSONArray) {
             JSONArray array=(JSONArray)resultObject;
+            DecimalFormat df = new DecimalFormat();
+            df.setMinimumFractionDigits(2);
+            df.setMaximumFractionDigits(2);
+            
             for (Iterator it = array.iterator(); it.hasNext();) {
                 Object object = it.next();
                 JSONObject obj =(JSONObject)object;
-                Object tickets[] = { obj.get("numero_apuesta"), obj.get("apuesta"), obj.get("id_sorteo"), obj.get("sorteo"), obj.get("monto_apuesta"), obj.get("monto_premiado"), obj.get("fecha_pagado")};
+                monto_apuesta = Float.parseFloat(String.valueOf(obj.get("monto_apuesta")));
+                monto_premiado = Float.parseFloat(String.valueOf(obj.get("monto_premiado")));
+                
+                Object tickets[] = { obj.get("numero_apuesta"), obj.get("apuesta"), obj.get("id_sorteo"), obj.get("sorteo"), String.valueOf(df.format(monto_apuesta)), String.valueOf(df.format(monto_premiado)), obj.get("fecha_pagado")};
                 temporalModel.addRow(tickets);
             }
         }

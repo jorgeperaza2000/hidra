@@ -81,7 +81,7 @@ public class f_taquilla {
         Map<String,String> ticketParaImprimir = new HashMap<>();
         SortedMap ticketParaImprimirDatos = new TreeMap();
         ArrayList<NameValuePair> jugadas = new ArrayList<>();
-        List<String> apuestasAgotadas2 = new ArrayList<>();
+        //List<String> apuestasAgotadas2 = new ArrayList<>();
         List<List<String>> apuestasAgotadas = new ArrayList<>();
         
         int cuantos = 0;
@@ -113,8 +113,8 @@ public class f_taquilla {
                 int i = 0;
                 for (Iterator it = array.iterator(); it.hasNext();) {
                     
-                    //apuestasAgotadas = new ArrayList<>();
-                    apuestasAgotadas.add(apuestasAgotadas2);
+                    apuestasAgotadas.add(new ArrayList());
+                    
                     Object object = it.next();
                     JSONObject obj =(JSONObject)object;
                     if ( obj.get("codigoRespuesta").equals("ok")) {
@@ -157,7 +157,7 @@ public class f_taquilla {
                         apuestasAgotadas.get(i).add((String) obj.get("sorteo"));
                         apuestasAgotadas.get(i).add((String) montoDisponible.toString());
                         apuestasAgotadas.get(i).add("Sorteo Cerrado");
-                        i = i + 1;
+                        i++;
                         cuantos = jTableApuesta.getRowCount();
                         actualizaMontosApuesta(jTableApuesta, cuantos, (String) obj.get("numeroApuesta"), (String) obj.get("idSorteo"), montoDisponible);
                         this.setMontoJugadas(jTableApuesta, jLabelMontoJugadas);
@@ -171,7 +171,7 @@ public class f_taquilla {
                         apuestasAgotadas.get(i).add((String) obj.get("sorteo"));
                         apuestasAgotadas.get(i).add((String) montoDisponible.toString());
                         apuestasAgotadas.get(i).add("Agotado");
-                        i = i + 1;
+                        i++;
                         cuantos = jTableApuesta.getRowCount();
                         actualizaMontosApuesta(jTableApuesta, cuantos, (String) obj.get("numeroApuesta"), (String) obj.get("idSorteo"), montoDisponible);
                         this.setMontoJugadas(jTableApuesta, jLabelMontoJugadas);

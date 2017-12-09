@@ -7,6 +7,7 @@ package controladores;
 
 import configuracion.ws_config;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
@@ -50,7 +51,7 @@ public class f_pagar_ticket {
 
             JSONParser parser = new JSONParser();
             Object resultObject = parser.parse(json);
-            
+            float monto_premiado = 0;
             if (resultObject instanceof JSONArray) {
                 JSONArray array = (JSONArray) resultObject;
                 //System.out.println(array);
@@ -59,7 +60,11 @@ public class f_pagar_ticket {
                     Object object = it.next();
                     JSONObject obj =(JSONObject)object;
                     if ( obj.get("codigoRespuesta").equals("ok") ) {
-                        if ( JOptionPane.showConfirmDialog(null, "Monto premiado: " + obj.get("montoPremiado") + " Desea Pagar?") == JOptionPane.OK_OPTION ) {
+                        DecimalFormat df = new DecimalFormat();
+                        df.setMinimumFractionDigits(2);
+                        df.setMaximumFractionDigits(2);
+                        monto_premiado = Float.parseFloat(String.valueOf(obj.get("montoPremiado")));
+                        if ( JOptionPane.showConfirmDialog(null, "Monto premiado: " + String.valueOf(df.format(monto_premiado)) + " Desea Pagar?") == JOptionPane.OK_OPTION ) {
                             pagar = this.pagarTicket(jTextFieldSerial, jTextFieldFecha);
                         } 
                     } else if ( obj.get("codigoRespuesta").equals("pagado") ) {

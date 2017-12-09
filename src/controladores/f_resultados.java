@@ -56,7 +56,7 @@ public class f_resultados {
     
     
     
-    public void obtenerResultados(JTextField jTextFieldFecha, JLabel jLabelLA10, JLabel jLabelLA11, JLabel jLabelLA12, JLabel jLabelLA1, JLabel jLabelLA4, JLabel jLabelLA5, JLabel jLabelLA6, JLabel jLabelLA7) throws IOException, ParseException {
+    public void obtenerResultados(JTextField jTextFieldFecha, JLabel jLabelLA9, JLabel jLabelLA10, JLabel jLabelLA11, JLabel jLabelLA12, JLabel jLabelLA1, JLabel jLabelLA3, JLabel jLabelLA4, JLabel jLabelLA5, JLabel jLabelLA6, JLabel jLabelLA7) throws IOException, ParseException {
         ws_config ws = new ws_config();
         String pathToServer = ws.getPath();
         CloseableHttpClient client = HttpClientBuilder.create().build();
@@ -67,10 +67,12 @@ public class f_resultados {
 
         JSONParser parser = new JSONParser();
         Object resultObject = parser.parse(json);
+        jLabelLA9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/proximamente.jpg")));
         jLabelLA10.setIcon(null);
         jLabelLA11.setIcon(null);
         jLabelLA12.setIcon(null);
         jLabelLA1.setIcon(null);
+        jLabelLA3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/proximamente.jpg")));
         jLabelLA4.setIcon(null);
         jLabelLA5.setIcon(null);
         jLabelLA6.setIcon(null);
@@ -86,28 +88,34 @@ public class f_resultados {
                 } else {
                     numero = obj.get("numero_apuesta").toString();
                 }
-                if ( obj.get("id_sorteo").equals("1")) {
+                if ( obj.get("id_sorteo").equals("9")) {
+                    jLabelLA9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
+                }
+                if ( obj.get("id_sorteo").equals("10")) {
                     jLabelLA10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
-                } 
-                if ( obj.get("id_sorteo").equals("2")) {
+                }
+                if ( obj.get("id_sorteo").equals("11")) {
                     jLabelLA11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
                 } 
-                if ( obj.get("id_sorteo").equals("3")) {
+                if ( obj.get("id_sorteo").equals("12")) {
                     jLabelLA12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
                 } 
-                if ( obj.get("id_sorteo").equals("4")) {
+                if ( obj.get("id_sorteo").equals("1")) {
                     jLabelLA1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
                 } 
-                if ( obj.get("id_sorteo").equals("5")) {
+                if ( obj.get("id_sorteo").equals("3")) {
+                    jLabelLA3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
+                } 
+                if ( obj.get("id_sorteo").equals("4")) {
                     jLabelLA4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
                 } 
-                if ( obj.get("id_sorteo").equals("6")) {
+                if ( obj.get("id_sorteo").equals("5")) {
                     jLabelLA5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
                 } 
-                if ( obj.get("id_sorteo").equals("7")) {
+                if ( obj.get("id_sorteo").equals("6")) {
                     jLabelLA6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
                 } 
-                if ( obj.get("id_sorteo").equals("8")) {
+                if ( obj.get("id_sorteo").equals("7")) {
                     jLabelLA7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/" + numero + ".jpg")));
                 }
             }

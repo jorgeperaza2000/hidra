@@ -317,7 +317,7 @@
                   <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Versi&#xf3;n: 1.2-171205"/>
+                <Property name="text" type="java.lang.String" value="Versi&#xf3;n: 1.2-171209"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
             </Component>

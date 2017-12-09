@@ -7,6 +7,7 @@ package controladores;
 
 import configuracion.ws_config;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -47,13 +48,25 @@ public class f_rpt_ventas_generales {
         JSONParser parser = new JSONParser();
         Object resultObject = parser.parse(json);
         
+        float venta = 0;
+        float comision = 0;
+        float premios = 0;        
+        float total = 0;
         DefaultTableModel temporalModel = (DefaultTableModel) jTable.getModel();
         if (resultObject instanceof JSONArray) {
             JSONArray array=(JSONArray)resultObject;
+            DecimalFormat df = new DecimalFormat();
+            df.setMinimumFractionDigits(2);
+            df.setMaximumFractionDigits(2);
+            
             for (Iterator it = array.iterator(); it.hasNext();) {
                 Object object = it.next();
                 JSONObject obj =(JSONObject)object;
-                Object ventasGenerales[] = { obj.get("venta"), obj.get("comision"), obj.get("premios"), obj.get("total")};
+                venta = Float.parseFloat(String.valueOf((obj.get("venta")==null)?0:obj.get("venta")));
+                comision = Float.parseFloat(String.valueOf((obj.get("comision")==null)?0:obj.get("comision")));
+                premios = Float.parseFloat(String.valueOf((obj.get("premios")==null)?0:obj.get("premios")));
+                total = Float.parseFloat(String.valueOf((obj.get("total")==null)?0:obj.get("total")));
+                Object ventasGenerales[] = { String.valueOf(df.format(venta)), String.valueOf(df.format(comision)), String.valueOf(df.format(premios)), String.valueOf(df.format(total))};
                 temporalModel.addRow(ventasGenerales);
             }
         }

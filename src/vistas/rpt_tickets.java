@@ -264,23 +264,34 @@ public class rpt_tickets extends javax.swing.JFrame {
     private void jTableTicketsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTicketsMouseClicked
         if (evt.getClickCount() == 2) {
             int row = this.jTableTickets.getSelectedRow();
-            String id_ticket = (String) this.jTableTickets.getValueAt(row, 0);
-            String fecha = (String) this.jTableTickets.getValueAt(row, 1);
-            String numero_ticket = (String) this.jTableTickets.getValueAt(row, 2);
-            Float total_monto = Float.valueOf((String) this.jTableTickets.getValueAt(row, 3));
-            Float monto_premiado = Float.valueOf((String) this.jTableTickets.getValueAt(row, 4));
-            String pagado = (String) this.jTableTickets.getValueAt(row, 5);
-            DecimalFormat df = new DecimalFormat();
-            df.setMinimumFractionDigits(2);
-            df.setMaximumFractionDigits(2);
-            rpt_det_tickets rpt_dt = new rpt_det_tickets(this, true);
-            rpt_dt.jLabelFecha.setText(fecha);
-            rpt_dt.jLabelNumeroTicket.setText(numero_ticket);
-            rpt_dt.jLabelMontoTicket.setText(df.format(total_monto));
-            rpt_dt.jLabelMontoPremiado.setText(df.format(monto_premiado));
-            rpt_dt.jLabelIdTicket.setText(id_ticket);
-            rpt_dt.cargaDetalleTicket();
-            rpt_dt.setVisible(true);
+            
+            if ( this.jTableTickets.getValueAt(row, 0) == "" ) {
+                evt.consume();
+            } else {
+                String id_ticket = (String) this.jTableTickets.getValueAt(row, 0);
+                String fecha = (String) this.jTableTickets.getValueAt(row, 1);
+                String numero_ticket = (String) this.jTableTickets.getValueAt(row, 2);
+                String str_total_monto = (String) this.jTableTickets.getValueAt(row, 3);
+                str_total_monto = str_total_monto.replace(",","");
+                str_total_monto = str_total_monto.replace(".","");
+                String str_monto_premiado= (String) this.jTableTickets.getValueAt(row, 4);
+                str_monto_premiado = str_monto_premiado.replace(",","");
+                str_monto_premiado = str_monto_premiado.replace(".","");
+                Float total_monto = Float.parseFloat(str_total_monto);
+                Float monto_premiado = Float.parseFloat(str_monto_premiado);
+                String pagado = (String) this.jTableTickets.getValueAt(row, 5);
+                DecimalFormat df = new DecimalFormat();
+                df.setMinimumFractionDigits(2);
+                df.setMaximumFractionDigits(2);
+                rpt_det_tickets rpt_dt = new rpt_det_tickets(this, true);
+                rpt_dt.jLabelFecha.setText(fecha);
+                rpt_dt.jLabelNumeroTicket.setText(numero_ticket);
+                rpt_dt.jLabelMontoTicket.setText(df.format(total_monto));
+                rpt_dt.jLabelMontoPremiado.setText(df.format(monto_premiado));
+                rpt_dt.jLabelIdTicket.setText(id_ticket);
+                rpt_dt.cargaDetalleTicket();
+                rpt_dt.setVisible(true);
+            }
         }
     }//GEN-LAST:event_jTableTicketsMouseClicked
 

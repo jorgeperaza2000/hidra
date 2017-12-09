@@ -77,7 +77,11 @@ public class f_sorteos {
                         for (Iterator it = array.iterator(); it.hasNext();) {
                             Object object = it.next();
                             JSONObject obj =(JSONObject)object;
-                            Object sorteos[]= { false, obj.get("id"), obj.get("sorteo")};
+                            String espacios = " ";
+                            if ( obj.get("tecla").toString().length() == 4 ) {
+                                espacios = "   ";
+                            }
+                            Object sorteos[]= { false, obj.get("id"), obj.get("tecla") + espacios + obj.get("sorteo")};
                             originalModel.addRow(sorteos);
                         }
                     }
@@ -89,14 +93,16 @@ public class f_sorteos {
     
     public String nombreSorteos(int id_sorteo) {
         Map<Integer, String> nombreSorteo = new HashMap<>();
-        nombreSorteo.put(1, "@LottoActivo 10");
-        nombreSorteo.put(2, "@LottoActivo 11");
-        nombreSorteo.put(3, "@LottoActivo 12");
-        nombreSorteo.put(4, "@LottoActivo 1");
-        nombreSorteo.put(5, "@LottoActivo 4");
-        nombreSorteo.put(6, "@LottoActivo 5");
-        nombreSorteo.put(7, "@LottoActivo 6");
-        nombreSorteo.put(8, "@LottoActivo 7");
+        nombreSorteo.put(9, "@LottoActivo 9");
+        nombreSorteo.put(10, "@LottoActivo 10");
+        nombreSorteo.put(11, "@LottoActivo 11");
+        nombreSorteo.put(12, "@LottoActivo 12");
+        nombreSorteo.put(1, "@LottoActivo 1");
+        nombreSorteo.put(3, "@LottoActivo 3");
+        nombreSorteo.put(4, "@LottoActivo 4");
+        nombreSorteo.put(5, "@LottoActivo 5");
+        nombreSorteo.put(6, "@LottoActivo 6");
+        nombreSorteo.put(7, "@LottoActivo 7");
         return nombreSorteo.get(id_sorteo);
     }
     

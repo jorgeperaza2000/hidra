@@ -157,7 +157,7 @@ public class login extends javax.swing.JFrame {
 
         jLabel6.setForeground(java.awt.Color.white);
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Versión: 1.2-171205");
+        jLabel6.setText("Versión: 1.2-171209");
         jLabel6.setToolTipText("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
