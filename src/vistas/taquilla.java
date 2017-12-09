@@ -62,9 +62,15 @@ public class taquilla extends javax.swing.JFrame {
         
         
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
+            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0), "F9");
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0), "F2");
+            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0), "F10");
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, 0), "F11");
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, 0), "F12");
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
             javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0), "F3");
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -75,10 +81,6 @@ public class taquilla extends javax.swing.JFrame {
             javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0), "F6");
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
             javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0), "F7");
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0), "F8");
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-            javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0), "F8");
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
             javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_PLUS, 0), "+");
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -100,64 +102,57 @@ public class taquilla extends javax.swing.JFrame {
                     }*/
                 }
             });
+            getRootPane().getActionMap().put("F9", new javax.swing.AbstractAction(){
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e)
+                { marcarSorteo("F9"); }
+            });
+            getRootPane().getActionMap().put("F10", new javax.swing.AbstractAction(){
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e)
+                { marcarSorteo("F10"); }
+            });
+            getRootPane().getActionMap().put("F11", new javax.swing.AbstractAction(){
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e)
+                { marcarSorteo("F11"); }
+            });
+            getRootPane().getActionMap().put("F12", new javax.swing.AbstractAction(){
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e)
+                { marcarSorteo("F12"); }
+            });
+            
             getRootPane().getActionMap().put("F1", new javax.swing.AbstractAction(){
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F1");
-                }
-            });
-            getRootPane().getActionMap().put("F2", new javax.swing.AbstractAction(){
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F2");
-                }
+                { marcarSorteo("F1"); }
             });
             getRootPane().getActionMap().put("F3", new javax.swing.AbstractAction(){
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F3");
-                }
+                { marcarSorteo("F3"); }
             });
             getRootPane().getActionMap().put("F4", new javax.swing.AbstractAction(){
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F4");
-                }
+                { marcarSorteo("F4"); }
             });
-            
             getRootPane().getActionMap().put("F5", new javax.swing.AbstractAction(){
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F5");
-                }
+                { marcarSorteo("F5"); }
             });
             getRootPane().getActionMap().put("F6", new javax.swing.AbstractAction(){
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F6");
-                }
+                { marcarSorteo("F6"); }
             });
             getRootPane().getActionMap().put("F7", new javax.swing.AbstractAction(){
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F7");
-                }
-            });
-            getRootPane().getActionMap().put("F8", new javax.swing.AbstractAction(){
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e)
-                {
-                    marcarSorteo("F8");
-                }
-            });
-            
+                { marcarSorteo("F7"); }
+            });            
     }
     
     public void obtenerConectividad(){
@@ -206,14 +201,16 @@ public class taquilla extends javax.swing.JFrame {
         int rows = modelo.getRowCount();
         String sorteoId = null;
         String sorteo = null;
+        if ( "F9".equals(tecla) ) { sorteoId = "9";}
+        if ( "F10".equals(tecla) ) { sorteoId = "10";}
+        if ( "F11".equals(tecla) ) { sorteoId = "11";}
+        if ( "F12".equals(tecla) ) { sorteoId = "12";}
         if ( "F1".equals(tecla) ) { sorteoId = "1";}
-        if ( "F2".equals(tecla) ) { sorteoId = "2";}
         if ( "F3".equals(tecla) ) { sorteoId = "3";}
         if ( "F4".equals(tecla) ) { sorteoId = "4";}
         if ( "F5".equals(tecla) ) { sorteoId = "5";}
         if ( "F6".equals(tecla) ) { sorteoId = "6";}
         if ( "F7".equals(tecla) ) { sorteoId = "7";}
-        if ( "F8".equals(tecla) ) { sorteoId = "8";}
         for( int i = 0; i < rows; i++ ) {
             sorteo = modelo.getValueAt(i, 1).toString();
             if ( sorteo.equals(sorteoId) ) {
